@@ -16,3 +16,5 @@ flutter_gank.iml
 flutter_gank_android.iml
 pubspec.lock
 test/
+
+android/*.log
