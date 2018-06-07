@@ -18,3 +18,5 @@ pubspec.lock
 test/
 
 android/*.log
+
+*.log

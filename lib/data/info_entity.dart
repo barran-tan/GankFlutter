@@ -15,16 +15,21 @@ class InfoDetail {
   bool used;
 
   String source;
-  List<String> images;
+  String image;
 
   // custom field
   bool read = false;
   bool favored = false;
 
   InfoDetail({this.id, this.type, this.createAt, this.publishedAt, this.desc,
-    this.url, this.who, this.used, this.source, this.images, this.read, this.favored});
+    this.url, this.who, this.used, this.source, this.image, this.read, this.favored});
 
   factory InfoDetail.fromJson(Map<String, dynamic> json) {
+    String imageUrl;
+    var images = json['images'];
+    if (images != null && images.length > 1) {
+      imageUrl = images[0];
+    }
     return new InfoDetail(
       id: json['_id'],
       type: json['type'],
@@ -35,10 +40,13 @@ class InfoDetail {
       who: json['who'],
       used: json['used'],
       source: json['source'],
-      images: json['images'],
+      image: imageUrl,
     );
   }
 
+  factory InfoDetail.empty(String type){
+    return new InfoDetail(type: type);
+  }
 }
 
 class DataResponse {
@@ -78,7 +86,11 @@ class HistoryResponse {
   factory HistoryResponse.fromJson(Map<String, dynamic> json) {
     bool error = json['error'];
     if (!error) {
-      List<String> results = json['results'];
+      List<String> results = new List();
+      if (json['results'] is List<dynamic>) {
+        List list = json['results'];
+        list.forEach((it) => results.add(it));
+      }
 
       print("HistoryResponse size ${results.length}");
 
@@ -107,7 +119,7 @@ class DailyDataResponse {
       Map<String, List<InfoDetail>> results = new Map();
 
       var keys = json['results'].keys;
-      print("jeys $keys");
+      print("keys $keys");
       for (String key in keys) {
         List<InfoDetail> itemList = new List();
         for (var item in json['results'][key]) {
@@ -116,11 +128,15 @@ class DailyDataResponse {
 
         results[key] = itemList;
 
-        print("key@$key, itemList size ${itemList.length}");
+        print("key: @$key, itemList size ${itemList.length}");
       }
 
+      List categories = json['category'];
+      List<String> list = new List();
+      categories.forEach((it) => list.add(it));
+
       return new DailyDataResponse(
-          category: json['category'],
+          category:list,
           error: error,
           results: results
       );

@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gank/ui/gank_date_list.dart';
 import 'package:flutter_gank/ui/gank_info_list.dart';
 import 'package:flutter_gank/ui/girl_list.dart';
+import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 
-void main() => runApp(new TabbedAppBarSample());
+void main() {
+  debugPaintSizeEnabled = true;
+  runApp(new TabbedAppBarSample());
+}
 
 
 class TabbedAppBarSample extends StatelessWidget {
@@ -39,15 +43,6 @@ class TabbedAppBarSample extends StatelessWidget {
                       );
                     });
                   }),
-//              new IconButton(
-//                  icon: new Icon(Icons.history), onPressed: () {
-//                Navigator.of(context).push(
-//                  new MaterialPageRoute(builder: (context) {
-//                    return new DateList();
-//                  })
-//                  ,
-//                );
-//              }),
             ],
           ),
           body: new TabBarView(

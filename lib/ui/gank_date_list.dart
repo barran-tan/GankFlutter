@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gank/data/data_sourse.dart';
+import 'package:flutter_gank/ui/gank_info_detail.dart';
 
 class DateList extends StatefulWidget {
   @override
@@ -56,9 +57,16 @@ class DateListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Card(child: new Padding(
+    return new GestureDetector(child: new Card(child: new Padding(
       padding: new EdgeInsets.only(
           left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
-      child: new Text(_date),),);
+      child: new Text(_date),),),
+      onTap: () {
+        Navigator.of(context).push(
+            new MaterialPageRoute(builder: (context) {
+              DateTime time = DateTime.parse(_date);
+              return new DailyInfo(time);
+            }));
+      },);
   }
 }

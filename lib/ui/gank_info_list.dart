@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gank/data/data_sourse.dart';
 import 'package:flutter_gank/data/info_entity.dart';
+import 'package:flutter_gank/ui/web_page.dart';
 
 
 class InfoListPage extends StatefulWidget {
@@ -43,7 +44,7 @@ class InfoListState extends State<InfoListPage> {
 
   _getInfoList() async {
     var results = await DataSource.getInfoList(_type, count, _pageIndex);
-    print("_getInfoList $results");
+//    print("_getInfoList $results");
     if (!mounted)
       return;
     setState(() {
@@ -79,7 +80,7 @@ class InfoListItem extends StatelessWidget {
     var time = DateTime.parse(_infoDetail.publishedAt);
 
     var image;
-    if (_infoDetail.images == null) {
+    if (_infoDetail.image == null) {
       image = new Image.asset("images/empty.png", height: 40.0,
         width: 40.0,);
     } else {
@@ -88,10 +89,10 @@ class InfoListItem extends StatelessWidget {
         width: 40.0,
         placeholder: new CircularProgressIndicator(),
         errorWidget: new Image.asset("images/failpicture.png"),
-        imageUrl: _infoDetail.images[0],);
+        imageUrl: _infoDetail.image,);
     }
 
-    return new Card(
+    return new GestureDetector(child: new Card(
         child: new Row(children: <Widget>[
           image,
 
@@ -100,6 +101,7 @@ class InfoListItem extends StatelessWidget {
                 new Text(
                   _infoDetail.desc,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
                   maxLines: 1,),
                 new Row(
                   children: <Widget>[
@@ -107,11 +109,17 @@ class InfoListItem extends StatelessWidget {
                         _infoDetail.who != null ? _infoDetail.who : "unkown"),
                     new Text("${time.year}/${time.month}/${time.day}"),
                     new Image.asset("images/arrow_right.png")
-                  ],)
+                  ], mainAxisSize: MainAxisSize.min,)
               ])),
 
         ],)
-    );
+    ),
+      onTap: () {
+        Navigator.of(context).push(
+            new MaterialPageRoute(builder: (context) {
+              return new WebPage(_infoDetail.url, _infoDetail.desc);
+            }));
+      },);
   }
 
 }
