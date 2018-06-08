@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gank/data/data_sourse.dart';
 import 'package:flutter_gank/data/info_entity.dart';
 import 'package:flutter_gank/ui/gank_info_list.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DailyInfo extends StatefulWidget {
 
@@ -25,7 +25,7 @@ class DailyInfoState extends State<DailyInfo> {
 
   List<InfoDetail> _infoList;
 
-  String image;
+  String _image;
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class DailyInfoState extends State<DailyInfo> {
     var welfare = DataSource.getNameByType(InfoType.welfare);
     results.forEach((key, list) {
       if (welfare == key) {
-        image = list.first.url;
+        _image = list.first.url;
       } else {
         // add empty info as group
         _infoList.add(new InfoDetail.empty(key));
@@ -71,6 +71,13 @@ class DailyInfoState extends State<DailyInfo> {
               }),
         ),
         body: new ListView.builder(itemBuilder: (context, index) {
+          if (index == 0 && _image != null) {
+            return new CachedNetworkImage(
+              placeholder: new CircularProgressIndicator(),
+              errorWidget: new Image.asset("images/failpicture.png"),
+              imageUrl: _image,);
+          }
+
           var info = _infoList[index];
           if (info.url == null) {
             return new TypeItem(info.type);
@@ -79,7 +86,7 @@ class DailyInfoState extends State<DailyInfo> {
             return new InfoListItem(info);
           }
         },
-          itemCount: _infoList.length,),
+          itemCount: _infoList.length + ((_image != null) ? 1 : 0),),
 
       ),
     );
