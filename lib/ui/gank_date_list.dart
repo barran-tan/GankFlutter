@@ -37,6 +37,10 @@ class DateListState extends State<DateList> {
       home: new Scaffold(
         appBar: new AppBar(
           title: const Text('history list'),
+          leading: new IconButton(icon: new Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }),
         ),
         body: new ListView.builder(itemBuilder: (context, index) {
           return new DateListItem(_list[index]);

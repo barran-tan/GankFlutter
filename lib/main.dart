@@ -21,7 +21,10 @@ class TabbedAppBarSample extends StatelessWidget {
         length: list.length,
         child: new Scaffold(
           appBar: new AppBar(
-            title: const Text('GankFlutter'),
+            title: new GestureDetector(child: const Text('GankFlutter'),
+              onTap: () {
+                debugPaintSizeEnabled = !debugPaintSizeEnabled;
+              },),
             bottom: new TabBar(
               isScrollable: true,
               tabs: list.map((String type) {
@@ -53,7 +56,11 @@ class TabbedAppBarSample extends StatelessWidget {
 
           floatingActionButton: new Builder(builder: (context) {
             return new FloatingActionButton(
-                child: new Image.asset("images/girl.png"),
+                child: new Image.asset(
+                  "images/girl.png",
+                  color: new Color.fromARGB(255, 68, 208, 128),
+                ),
+                backgroundColor: Colors.white70,
                 onPressed: () {
                   Navigator.of(context).push(
                       new MaterialPageRoute(builder: (context) {

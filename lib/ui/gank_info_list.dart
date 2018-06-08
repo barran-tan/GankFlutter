@@ -107,8 +107,8 @@ class InfoListItem extends StatelessWidget {
             "${_infoDetail.who != null ? _infoDetail.who : "unkown"}  ${time
                 .year}/${time.month}/${time.day}"),
         //显示右侧的箭头，不显示则传null
-        trailing: new Image.asset("images/arrow_right.png", height: 40.0,
-          width: 40.0,
+        trailing: new Image.asset("images/arrow_right.png", height: 30.0,
+          width: 30.0,
           fit: BoxFit.cover,),
       ),
 

@@ -65,6 +65,10 @@ class DailyInfoState extends State<DailyInfo> {
       home: new Scaffold(
         appBar: new AppBar(
           title: new Text("${_date.year}/${_date.month}/${_date.day}"),
+          leading: new IconButton(icon: new Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }),
         ),
         body: new ListView.builder(itemBuilder: (context, index) {
           var info = _infoList[index];

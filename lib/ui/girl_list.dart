@@ -26,7 +26,7 @@ class GirlListState extends State<GirlList> {
 
   _getGirlList() async {
     var results = await DataSource.getInfoList(
-        DataSource.getNameByType(InfoType.welfare), 20, _page);
+        DataSource.getNameByType(InfoType.welfare), 20, 0);
 //    print("_getInfoList $results");
     if (!mounted)
       return;
@@ -49,6 +49,10 @@ class GirlListState extends State<GirlList> {
       home: new Scaffold(
         appBar: new AppBar(
           title: const Text('妹子'),
+          leading: new IconButton(icon: new Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }),
         ),
         body: new ListView.builder(itemBuilder: (context, index) {
           return new CachedNetworkImage(
