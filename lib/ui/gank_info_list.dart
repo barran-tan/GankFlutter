@@ -9,7 +9,7 @@ class InfoListPage extends StatefulWidget {
 
   InfoListPage(this._type);
 
-  String _type;
+  final String _type;
 
   @override
   State createState() {
@@ -57,7 +57,7 @@ class InfoList extends StatelessWidget {
 
   InfoList(this._list);
 
-  List<InfoDetail> _list;
+  final List<InfoDetail> _list;
 
   @override
   Widget build(BuildContext context) {
@@ -81,38 +81,37 @@ class InfoListItem extends StatelessWidget {
 
     var image;
     if (_infoDetail.image == null) {
-      image = new Image.asset("images/empty.png", height: 40.0,
-        width: 40.0,);
+      image = new Image.asset("images/empty.png",
+        width: 60.0, fit: BoxFit.fitWidth,);
     } else {
       image = new CachedNetworkImage(
-        height: 40.0,
-        width: 40.0,
+        width: 60.0,
+        fit: BoxFit.fitWidth,
         placeholder: new CircularProgressIndicator(),
         errorWidget: new Image.asset("images/failpicture.png"),
         imageUrl: _infoDetail.image,);
     }
 
     return new GestureDetector(child: new Card(
-        child: new Row(children: <Widget>[
-          image,
+      child: new ListTile(
+        //子item的是否为三行
+        isThreeLine: false,
+        dense: false,
+        //左侧图标，不显示则传null
+        leading: image,
+        //item标题
+        title: new Text(
+          _infoDetail.desc, maxLines: 3, overflow: TextOverflow.ellipsis,),
+        //item内容
+        subtitle: new Text(
+            "${_infoDetail.who != null ? _infoDetail.who : "unkown"}  ${time
+                .year}/${time.month}/${time.day}"),
+        //显示右侧的箭头，不显示则传null
+        trailing: new Image.asset("images/arrow_right.png", height: 40.0,
+          width: 40.0,
+          fit: BoxFit.cover,),
+      ),
 
-          new Expanded(
-              child: new Column(children: <Widget>[
-                new Text(
-                  _infoDetail.desc,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  maxLines: 1,),
-                new Row(
-                  children: <Widget>[
-                    new Text(
-                        _infoDetail.who != null ? _infoDetail.who : "unkown"),
-                    new Text("${time.year}/${time.month}/${time.day}"),
-                    new Image.asset("images/arrow_right.png")
-                  ], mainAxisSize: MainAxisSize.min,)
-              ])),
-
-        ],)
     ),
       onTap: () {
         Navigator.of(context).push(

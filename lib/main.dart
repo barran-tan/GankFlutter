@@ -5,7 +5,7 @@ import 'package:flutter_gank/ui/girl_list.dart';
 import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 
 void main() {
-  debugPaintSizeEnabled = true;
+  debugPaintSizeEnabled = false;
   runApp(new TabbedAppBarSample());
 }
 

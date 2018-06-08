@@ -3,7 +3,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class WebPage extends StatelessWidget {
 
-  String _url;
+  final String _url;
 
   String _title;
 

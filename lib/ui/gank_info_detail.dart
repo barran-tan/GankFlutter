@@ -8,7 +8,7 @@ class DailyInfo extends StatefulWidget {
 
   DailyInfo(this._date);
 
-  DateTime _date;
+  final DateTime _date;
 
   @override
   State<StatefulWidget> createState() {
@@ -21,7 +21,7 @@ class DailyInfoState extends State<DailyInfo> {
 
   DailyInfoState(this._date);
 
-  DateTime _date;
+  final DateTime _date;
 
   List<InfoDetail> _infoList;
 
@@ -85,7 +85,7 @@ class DailyInfoState extends State<DailyInfo> {
 
 class TypeItem extends StatelessWidget {
 
-  String _type;
+  final String _type;
 
   TypeItem(this._type);
 

@@ -16,18 +16,18 @@ class DataSource {
     final response = await http.get(
         base_url + "api/data/$type/$pageCount/$pageNum");
 //    print("getInfoList:\n ${response.body}");
-    final json = JSON.decode(response.body);
+    final result = json.decode(response.body);
 
-    return new DataResponse.fromJson(json).results;
+    return new DataResponse.fromJson(result).results;
   }
 
   static Future<List<String>> getDateList() async {
     final response = await http.get(
         base_url + "api/day/history");
 //    print("getDateList:\n ${response.body}");
-    final json = JSON.decode(response.body);
+    final result = json.decode(response.body);
 
-    return new HistoryResponse.fromJson(json).results;
+    return new HistoryResponse.fromJson(result).results;
   }
 
   static Future<Map<String, List<InfoDetail>>> getDailyInfo(int year, int month,
@@ -35,9 +35,9 @@ class DataSource {
     final response = await http.get(
         base_url + "api/day/$year/$month/$day");
 //    print("getDailyInfo:\n ${response.body}");
-    final json = JSON.decode(response.body);
+    final result = json.decode(response.body);
 
-    return new DailyDataResponse.fromJson(json).results;
+    return new DailyDataResponse.fromJson(result).results;
   }
 
   static String getNameByType(InfoType type) {

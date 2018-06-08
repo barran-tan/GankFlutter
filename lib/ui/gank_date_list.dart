@@ -53,7 +53,7 @@ class DateListItem extends StatelessWidget {
 
   DateListItem(this._date);
 
-  String _date;
+  final String _date;
 
   @override
   Widget build(BuildContext context) {
