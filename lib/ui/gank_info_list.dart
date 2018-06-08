@@ -1,9 +1,11 @@
+import 'dart:async' show Future;
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gank/data/data_sourse.dart';
 import 'package:flutter_gank/data/info_entity.dart';
 import 'package:flutter_gank/ui/web_page.dart';
-
+import 'package:flutter_gank/refresh/Refresh.dart';
 
 class InfoListPage extends StatefulWidget {
 
@@ -25,13 +27,31 @@ class InfoListState extends State<InfoListPage> {
 
   final int count = 10;
 
-  int _pageIndex = 1;
+  int _page = 1;
 
-  List<InfoDetail> _list;
+  List<InfoDetail> _list = new List();
+
+  bool _hasMore = true;
 
   @override
   Widget build(BuildContext context) {
-    return new InfoList(_list);
+    return RefreshLayout(
+      canloading: _hasMore,
+      canrefresh: true,
+      onRefresh: (boo) {
+        if (!boo) {
+          _page ++;
+          return _getInfoList();
+        } else {
+          _page = 0;
+          _list.clear();
+          return _getInfoList();
+        }
+      },
+      child: new ListView.builder(itemBuilder: (context, index) {
+        return new InfoListItem(_list[index]);
+      },
+        itemCount: _list.length,),);
   }
 
   @override
@@ -42,29 +62,21 @@ class InfoListState extends State<InfoListPage> {
     _getInfoList();
   }
 
-  _getInfoList() async {
-    var results = await DataSource.getInfoList(_type, count, _pageIndex);
-//    print("_getInfoList $results");
-    if (!mounted)
+  Future<Null> _getInfoList() async {
+    print("_getInfoList $_page");
+    var results = await DataSource.getInfoList(_type, count, _page);
+    if (!mounted || results == null)
       return;
     setState(() {
-      _list = results;
+      if (results.isEmpty) {
+        _hasMore = false;
+      } else {
+        _list.addAll(results);
+        if (results.length < count) {
+          _hasMore = false;
+        }
+      }
     });
-  }
-}
-
-class InfoList extends StatelessWidget {
-
-  InfoList(this._list);
-
-  final List<InfoDetail> _list;
-
-  @override
-  Widget build(BuildContext context) {
-    return new ListView.builder(itemBuilder: (context, index) {
-      return new InfoListItem(_list[index]);
-    },
-      itemCount: _list != null ? _list.length : 0,);
   }
 }
 

@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gank/data/data_sourse.dart';
 import 'package:flutter_gank/data/info_entity.dart';
+import 'package:flutter_gank/refresh/Refresh.dart';
+import 'dart:async' show Future;
 
 class GirlList extends StatefulWidget {
   @override
@@ -13,9 +15,13 @@ class GirlList extends StatefulWidget {
 
 class GirlListState extends State<GirlList> {
 
-  List<String> _list;
+  List<String> _list = new List();
 
-  int _page;
+  int _page = 1;
+
+  final int _pageCount = 10;
+
+  bool _hasMore = true;
 
   @override
   void initState() {
@@ -24,11 +30,11 @@ class GirlListState extends State<GirlList> {
     _getGirlList();
   }
 
-  _getGirlList() async {
+  Future<Null> _getGirlList() async {
     var results = await DataSource.getInfoList(
-        DataSource.getNameByType(InfoType.welfare), 20, 0);
-//    print("_getInfoList $results");
-    if (!mounted)
+        DataSource.getNameByType(InfoType.welfare), _pageCount, _page);
+    print("_getGirlList $_page");
+    if (!mounted || results == null)
       return;
 
     var list = new List<String>();
@@ -37,9 +43,12 @@ class GirlListState extends State<GirlList> {
         list.add(info.url);
       }
     });
+    if (results.isEmpty || results.length < _pageCount) {
+      _hasMore = false;
+    }
     print("_getGirlList ${list.length}");
     setState(() {
-      _list = list;
+      _list.addAll(list);
     });
   }
 
@@ -54,13 +63,26 @@ class GirlListState extends State<GirlList> {
                 Navigator.of(context).pop();
               }),
         ),
-        body: new ListView.builder(itemBuilder: (context, index) {
-          return new CachedNetworkImage(
-            placeholder: new CircularProgressIndicator(),
-            errorWidget: new Image.asset("images/failpicture.png"),
-            imageUrl: _list[index],);
-        },
-          itemCount: _list != null ? _list.length : 0,),
+        body: RefreshLayout(
+            canloading: _hasMore,
+            canrefresh: true,
+            onRefresh: (boo) {
+              if (!boo) {
+                _page ++;
+                return _getGirlList();
+              } else {
+                _page = 0;
+                _list.clear();
+                return _getGirlList();
+              }
+            },
+            child: new ListView.builder(itemBuilder: (context, index) {
+              return new CachedNetworkImage(
+                placeholder: new CircularProgressIndicator(),
+                errorWidget: new Image.asset("images/failpicture.png"),
+                imageUrl: _list[index],);
+            },
+              itemCount: _list.length,)),
 
       ),
     );
