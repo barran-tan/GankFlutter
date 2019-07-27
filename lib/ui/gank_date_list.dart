@@ -7,11 +7,9 @@ class DateList extends StatefulWidget {
   State<StatefulWidget> createState() {
     return new DateListState();
   }
-
 }
 
 class DateListState extends State<DateList> {
-
   List<String> _list;
 
   @override
@@ -24,8 +22,7 @@ class DateListState extends State<DateList> {
   _getDateList() async {
     var results = await DataSource.getDateList();
     print("_getDateList ${results.length}");
-    if (!mounted)
-      return;
+    if (!mounted) return;
     setState(() {
       _list = results;
     });
@@ -37,40 +34,44 @@ class DateListState extends State<DateList> {
       home: new Scaffold(
         appBar: new AppBar(
           title: const Text('history list'),
-          leading: new IconButton(icon: new Icon(Icons.arrow_back),
+          leading: new IconButton(
+              icon: new Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.of(context).pop();
               }),
         ),
-        body: new ListView.builder(itemBuilder: (context, index) {
-          return new DateListItem(_list[index]);
-        },
-          itemCount: _list != null ? _list.length : 0,),
-
+        body: new ListView.builder(
+          itemBuilder: (context, index) {
+            return new DateListItem(_list[index]);
+          },
+          itemCount: _list != null ? _list.length : 0,
+        ),
       ),
     );
   }
-
 }
 
 class DateListItem extends StatelessWidget {
-
   DateListItem(this._date);
 
   final String _date;
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(child: new Card(child: new Padding(
-      padding: new EdgeInsets.only(
-          left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
-      child: new Text(_date),),),
+    return new GestureDetector(
+      child: new Card(
+        child: new Padding(
+          padding: new EdgeInsets.only(
+              left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
+          child: new Text(_date),
+        ),
+      ),
       onTap: () {
-        Navigator.of(context).push(
-            new MaterialPageRoute(builder: (context) {
-              DateTime time = DateTime.parse(_date);
-              return new DailyInfo(time);
-            }));
-      },);
+        Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+          DateTime time = DateTime.parse(_date);
+          return new DailyInfo(time);
+        }));
+      },
+    );
   }
 }

@@ -1,20 +1,21 @@
+import 'dart:async' show Future;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gank/data/data_sourse.dart';
 import 'package:flutter_gank/data/info_entity.dart';
 import 'package:flutter_gank/refresh/Refresh.dart';
-import 'dart:async' show Future;
+
+import 'gank_info_detail.dart';
 
 class GirlList extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return new GirlListState();
   }
-
 }
 
 class GirlListState extends State<GirlList> {
-
   List<String> _list = new List();
 
   int _page = 1;
@@ -34,8 +35,7 @@ class GirlListState extends State<GirlList> {
     var results = await DataSource.getInfoList(
         DataSource.getNameByType(InfoType.welfare), _pageCount, _page);
     print("_getGirlList $_page");
-    if (!mounted || results == null)
-      return;
+    if (!mounted || results == null) return;
 
     var list = new List<String>();
     results.forEach((info) {
@@ -58,7 +58,8 @@ class GirlListState extends State<GirlList> {
       home: new Scaffold(
         appBar: new AppBar(
           title: const Text('妹子'),
-          leading: new IconButton(icon: new Icon(Icons.arrow_back),
+          leading: new IconButton(
+              icon: new Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.of(context).pop();
               }),
@@ -68,7 +69,7 @@ class GirlListState extends State<GirlList> {
             canrefresh: true,
             onRefresh: (boo) {
               if (!boo) {
-                _page ++;
+                _page++;
                 return _getGirlList();
               } else {
                 _page = 0;
@@ -76,16 +77,17 @@ class GirlListState extends State<GirlList> {
                 return _getGirlList();
               }
             },
-            child: new ListView.builder(itemBuilder: (context, index) {
-              return new CachedNetworkImage(
-                placeholder: new CircularProgressIndicator(),
-                errorWidget: new Image.asset("images/failpicture.png"),
-                imageUrl: _list[index],);
-            },
-              itemCount: _list.length,)),
-
+            child: new ListView.builder(
+              itemBuilder: (context, index) {
+                return new CachedNetworkImage(
+                  placeholder: getPlaceHolder,
+                  errorWidget: getErrorImage,
+                  imageUrl: _list[index],
+                );
+              },
+              itemCount: _list.length,
+            )),
       ),
     );
   }
-
 }

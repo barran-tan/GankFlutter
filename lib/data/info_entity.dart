@@ -21,8 +21,19 @@ class InfoDetail {
   bool read = false;
   bool favored = false;
 
-  InfoDetail({this.id, this.type, this.createAt, this.publishedAt, this.desc,
-    this.url, this.who, this.used, this.source, this.image, this.read, this.favored});
+  InfoDetail(
+      {this.id,
+      this.type,
+      this.createAt,
+      this.publishedAt,
+      this.desc,
+      this.url,
+      this.who,
+      this.used,
+      this.source,
+      this.image,
+      this.read,
+      this.favored});
 
   factory InfoDetail.fromJson(Map<String, dynamic> json) {
     String imageUrl;
@@ -44,7 +55,7 @@ class InfoDetail {
     );
   }
 
-  factory InfoDetail.empty(String type){
+  factory InfoDetail.empty(String type) {
     return new InfoDetail(type: type);
   }
 }
@@ -67,10 +78,7 @@ class DataResponse {
 
       print("DataResponse size ${list.length}");
 
-      return new DataResponse(
-          error: error,
-          results: list
-      );
+      return new DataResponse(error: error, results: list);
     } else {
       return null;
     }
@@ -94,10 +102,7 @@ class HistoryResponse {
 
       print("HistoryResponse size ${results.length}");
 
-      return new HistoryResponse(
-          error: error,
-          results: results
-      );
+      return new HistoryResponse(error: error, results: results);
     } else {
       return null;
     }
@@ -105,7 +110,6 @@ class HistoryResponse {
 }
 
 class DailyDataResponse {
-
   List<String> category;
   bool error = false;
   Map<String, List<InfoDetail>> results;
@@ -136,10 +140,7 @@ class DailyDataResponse {
       categories.forEach((it) => list.add(it));
 
       return new DailyDataResponse(
-          category:list,
-          error: error,
-          results: results
-      );
+          category: list, error: error, results: results);
     } else {
       return null;
     }
